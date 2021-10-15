@@ -12,9 +12,8 @@ Production
 ### How to run
 development  
 ```
-export TMDB_API_KEY=[your api key from tmdb]
 yarn
-yarn start:dev
+TMDB_API_KEY=[your api key from tmdb] yarn start:dev
 ```
 production
 ```
