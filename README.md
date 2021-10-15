@@ -26,7 +26,7 @@ docker run -p 3000:3000 -e TMDB_API_KEY=[your api key from tmdb] trailer_service
 2. Send a Get request on '/api/v1/trailer' with openapi dashboard
 
 ### Test
-All the functions have unit test.
+Unit tests and e2e tests has been developed
 ```
 yarn test
 yarn test:e2e
