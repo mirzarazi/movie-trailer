@@ -1,26 +1,33 @@
-import { Injectable } from '@nestjs/common';
-import { CreateTrailerDto } from './dto/create-trailer.dto';
-import { UpdateTrailerDto } from './dto/update-trailer.dto';
-
+import { Injectable, NotFoundException } from '@nestjs/common';
+import * as _ from 'lodash';
+import { TmdbService } from '../tmdb/tmdb.service';
+import { ViaplayService } from '../viaplay/viaplay.service';
 @Injectable()
 export class TrailerService {
-  create(createTrailerDto: CreateTrailerDto) {
-    return 'This action adds a new trailer';
-  }
+  constructor(
+    private viaPlayService: ViaplayService,
+    private tmdbService: TmdbService,
+  ) {}
 
-  findAll() {
-    return `This action returns all trailer`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} trailer`;
-  }
-
-  update(id: number, updateTrailerDto: UpdateTrailerDto) {
-    return `This action updates a #${id} trailer`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} trailer`;
+  async findOne(url: string) {
+    const response: any = await this.viaPlayService.movieInfo(url).catch(() => {
+      throw new NotFoundException();
+    });
+    const imdbId: string = _.get(
+      response,
+      [
+        '_embedded',
+        'viaplay:blocks',
+        '0',
+        '_embedded',
+        'viaplay:product',
+        'content',
+        'imdb',
+        'id',
+      ],
+      null,
+    );
+    if (imdbId) return this.tmdbService.movieTrailer(imdbId);
+    throw new NotFoundException();
   }
 }
