@@ -1,6 +1,6 @@
-Viaplay Coding Challenge
+Coding Challenge
 ===================
-This api has been developed on Nest.js framework, for retreiving movie trailers for Viaplay movies
+This api has been developed on Nest.js framework, for retreiving movie trailers for movies
 ## How it works
 ### Requiements
 Developement
