@@ -1,6 +1,6 @@
 Coding Challenge
 ===================
-This api has been developed on Nest.js framework, for retreiving movie trailers for movies
+This api has been developed on Nest.js framework, for retreiving trailers for movies
 ## How it works
 ### Requiements
 Developement
