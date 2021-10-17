@@ -2,10 +2,10 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from './../src/app.module';
+import { TrailerService } from '../src/trailer/trailer.service';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
-
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
@@ -22,13 +22,32 @@ describe('AppController (e2e)', () => {
       .expect({ status: 'alive' });
   });
 
-  it('/api/v1/trailer (GET) 200', () => {
-    return request(app.getHttpServer())
+  it('/api/v1/trailer (GET) 200 from source', (done) => {
+    TrailerService.prototype.findOne = jest.fn(
+      TrailerService.prototype.findOne,
+    );
+    request(app.getHttpServer())
       .get(
         '/api/v1/trailer?url=https%3A%2F%2Fcontent.viaplay.se%2Fpc-se%2Ffilm%2Farrival-2016',
       )
       .expect(200)
-      .expect({ url: 'https://www.youtube.com/watch?v=tFMo3UJ4B4g' });
+      .expect({ url: 'https://www.youtube.com/watch?v=tFMo3UJ4B4g' })
+      .end(done);
+    return expect(TrailerService.prototype.findOne).toBeCalledTimes(0);
+  });
+
+  it('/api/v1/trailer (GET) 200 from cache', (done) => {
+    TrailerService.prototype.findOne = jest.fn(
+      TrailerService.prototype.findOne,
+    );
+    request(app.getHttpServer())
+      .get(
+        '/api/v1/trailer?url=https%3A%2F%2Fcontent.viaplay.se%2Fpc-se%2Ffilm%2Farrival-2016',
+      )
+      .expect(200)
+      .expect({ url: 'https://www.youtube.com/watch?v=tFMo3UJ4B4g' })
+      .end(done);
+    return expect(TrailerService.prototype.findOne).toBeCalledTimes(0);
   });
 
   it('/api/v1/trailer (GET) 400', () => {
